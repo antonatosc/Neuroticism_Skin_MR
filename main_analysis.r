@@ -46,3 +46,5 @@ for(i in exposure){
                                                                       do_pruning = F,
                                                                       user_SNPsToKeep = variants_ecz_as_outc[[i]]$SNP)
 }
+rm(summary_data)
+save.image("res.RData")
