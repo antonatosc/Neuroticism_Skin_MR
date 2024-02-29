@@ -6,8 +6,8 @@ Figure scripts are also provided. Please note that aesthetic modifications in th
 
 Datasets:
 
-Neuroticism: https://ctg.cncr.nl/software/summary_statistics/
+* Neuroticism: https://ctg.cncr.nl/software/summary_statistics/
 
-Psoriasis: https://www.ebi.ac.uk/gwas/studies/GCST90019016
+* Psoriasis: https://www.ebi.ac.uk/gwas/studies/GCST90019016
 
-Atopic dermatitis: https://www.ebi.ac.uk/gwas/studies/GCST90244787
+* Atopic dermatitis: https://www.ebi.ac.uk/gwas/studies/GCST90244787
