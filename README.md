@@ -1,4 +1,4 @@
-# skin_neuroticism
+# Neuroticism_Skin_MR
 Source code for Neuroticism and inflammatory skin diseases: A Mendelian randomization study.
 
 Scripts in this repository were used to conduct the analysis performed in: "Antonatos C et al., Neuroticism and inflammatory skin diseases: A Mendelian randomization study".
