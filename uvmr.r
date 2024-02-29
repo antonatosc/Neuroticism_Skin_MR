@@ -6,6 +6,7 @@
 # The final output is a list containing all relevant results (accompanied by SIMEX results if IGX < 0.9).
 # Clumping is performed with a local EUR reference data to avoid IEU GWAS database server overload. The LD reference dataset was downloaded from: http://fileserve.mrcieu.ac.uk/ld/1kg.v3.tgz
 
+
 #Load packages
 #install.packages("devtools")
 library(devtools)
@@ -14,13 +15,14 @@ library(TwoSampleMR)
 #install.packages("ggplot2")
 library(ggplot2)
 #install.packages("data.table")
+library(data.table)
 
-uvmr = function(exp, outc, path_to_bfile, path_to_plink_bin){
+uvmr = function(exp, threshold, outc, path_to_bfile, path_to_plink_bin){
   print(paste0("Reading ", exp, ' instruments.'))
   exposure = fread(exp)
   print(paste0("Formatting ", exp, ' instruments.'))
   exposure[["P"]] = as.numeric(exposure[["P"]]) 
-  exposure = exposure[exposure[["P"]] < 5e-8, ]
+  exposure = exposure[exposure[["P"]] < threshold, ]
   exposure = as.data.frame(exposure)
   exposure = format_data(exposure,
                          type = "exposure",
@@ -67,6 +69,7 @@ uvmr = function(exp, outc, path_to_bfile, path_to_plink_bin){
   )
   harmonized$var_exp = varexp(harmonized)
   harmonized$f_stat = fstat(harmonized)
+  harmonized = harmonized[harmonized$f_stat >= 10, ]
   harmonized$id.exposure = exp
   harmonized$id.outcome = outc
   print(paste0("Performing MR: ", exp, " --> ", outc, "."))
@@ -84,6 +87,7 @@ uvmr = function(exp, outc, path_to_bfile, path_to_plink_bin){
   mrpresso = tryCatch({
     run_mr_presso(harmonized, NbDistribution = 1000, SignifThreshold = 0.05) },
     error=function(e){print("ERROR: Not enough IVs to run MRPRESSO.")})
+  mrpresso[[1]]$`Main MR results`$`P-value` <- 2 * pnorm(abs(mrpresso[[1]]$`Main MR results`$`T-stat`), lower.tail = FALSE) #make MRPRESSO results consistent with IVW estimates
   all = list(
     "data" = harmonized,
     "results" = res,
@@ -156,8 +160,8 @@ uvmr = function(exp, outc, path_to_bfile, path_to_plink_bin){
     print(paste0("I-squared statistic for IV strength for MR-Egger: ", exp, " --> ", outc, "."))
     print(all[["IGX2"]])
     print(paste0("SIMEX: ", exp, " --> ", outc, "."))
+    print(SIMEX_egger)
     print(paste0("MR-PRESSO: ", exp, " --> ", outc, "."))
-    print(all[["SIMEX"]])
     print(all[["presso"]][[1]]$`Main MR results`)
   }
   return(all)
