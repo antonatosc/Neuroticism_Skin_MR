@@ -79,10 +79,6 @@ uvmr = function(exp, threshold, outc, path_to_bfile, path_to_plink_bin){
   pleio = mr_pleiotropy_test(harmonized)
   print(paste0("Performing Heterogeneity test: ", exp, " --> ", outc, "."))
   het = mr_heterogeneity(harmonized)
-  print(paste0("Performing single SNP analysis: ", exp, " --> ", outc, "."))
-  single = mr_singlesnp(harmonized)
-  print(paste0("Performing LOO test: ", exp, " --> ", outc, "."))
-  loo = mr_leaveoneout(harmonized)
   print(paste0("Performing MR-PRESSO: ", exp, " --> ", outc, "."))
   mrpresso = tryCatch({
     run_mr_presso(harmonized, NbDistribution = 1000, SignifThreshold = 0.05) },
@@ -93,8 +89,6 @@ uvmr = function(exp, threshold, outc, path_to_bfile, path_to_plink_bin){
     "results" = res,
     "pleiotropy" = pleio,
     "heterogeneity" = het,
-    "single-snp" = single,
-    "leave-one-out" = loo,
     "presso" = mrpresso
   )
   all[["Variance explained"]] = sum(harmonized[harmonized$mr_keep == T, ]$var_exp)
